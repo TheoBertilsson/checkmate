@@ -40,6 +40,7 @@ const express_1 = __importDefault(require("express"));
 const sqlite = __importStar(require("sqlite"));
 const sqlite3_1 = __importDefault(require("sqlite3"));
 const uuid_1 = require("uuid");
+const bodyParser = require("body-parser");
 let database;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     database = yield sqlite.open({
@@ -51,6 +52,7 @@ let database;
 }))();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
+app.use(bodyParser.json());
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
@@ -88,6 +90,14 @@ app.get('/login', (req, res) => {
             res.status(401);
             res.end();
         }
+    });
+});
+app.post('/signup', (req, res) => {
+    database.all("INSERT INTO accounts (account_email, password, username) VALUES (?,?,?)", [req.body.email, req.body.password, req.body.username]).then(() => {
+        res.status(201);
+        res.end();
+    }).catch(() => {
+        res.status(400).end();
     });
 });
 app.listen(8080, () => {
