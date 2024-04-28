@@ -60,6 +60,7 @@ main {
   align-items: center;
   border-radius: 4px;
   cursor: pointer;
+  border: none;
 }
 .errorLogin{
   color: red;
@@ -76,6 +77,7 @@ main {
   color: #fefae0;
   font-size: 24px;
   margin-top: 4vh;
+  border: none;
 }
 .signUpBtn {
   font-size: 24px;

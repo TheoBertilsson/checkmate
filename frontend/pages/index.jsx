@@ -7,7 +7,6 @@ function Home() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [loginFailed, setLoginFailed] = useState(false);
-  const [token, setToken] = useState("");
   function login() {
     fetch(
       "http://localhost:8080/login?username=" +
