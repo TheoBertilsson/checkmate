@@ -61,6 +61,9 @@ main {
   border-radius: 4px;
   cursor: pointer;
 }
+.errorLogin{
+  color: red;
+}
 .createListBtn {
   width: 270px;
   margin-top: 1vh;
@@ -94,6 +97,22 @@ main {
   text-decoration: none;
   color: #283618;
   background-color: #fefae0;
+  width: 270px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+.checkedItemBox{
+  font-size: 22px;
+  text-decoration: none;
+  color: #283618;
+  background-color: #606c3842;
+  text-decoration: line-through;
   width: 270px;
   height: 48px;
   border-radius: 12px;

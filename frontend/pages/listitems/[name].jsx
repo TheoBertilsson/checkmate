@@ -6,13 +6,10 @@ import AddItem from "../../components/addItem.js";
 const listitems = () => {
   const { name } = useRouter().query;
   const [addItemPopUp, setaddItemPopUp] = useState(false);
-  const [clickedItem, setclickedItem] = useState(false)
+  const [clickedItem, setclickedItem] = useState(false);
   const [itemList, setitemList] = useState([
-    { name: "Charger", priority: 1, id: 1 },
-    { name: "Underwear", priority: 1, id: 2 },
-    { name: "makeup", priority: 1, id: 3 },
-    { name: "tshirts", priority: 1, id: 4 },
   ]);
+  const [checkItemList, setCheckItemList] = useState([{ name: "Charger", priority: 1, id: 1 }]);
 
   return (
     <>
@@ -23,7 +20,7 @@ const listitems = () => {
         >
           {name}
         </h2>
-        {itemList !== "" && (
+        {itemList.length + checkItemList.length !== 0 && (
           <div
             className="listItemsBox"
             style={addItemPopUp === true ? { filter: "blur(5px)" } : {}}
@@ -33,16 +30,21 @@ const listitems = () => {
                 <p
                   key={item.id}
                   className="itemBox"
-                  style={
-                    clickedItem === true
-                      ? {
-                          backgroundColor: "#606C3842",
-                          textDecoration: "line-through",
-                        }
-                      : {}
-                  }
-                  onClick={()=>{style={
-                    backgroundColor: "#606C3842"}
+                  onClick={() => {
+                    setclickedItem(true);
+                  }}
+                >
+                  {item.name}
+                </p>
+              </React.Fragment>
+            ))}
+            {checkItemList.map((item) => (
+              <React.Fragment key={item.id}>
+                <p
+                  key={item.id}
+                  className="checkedItemBox"
+                  onClick={() => {
+                    setclickedItem(true);
                   }}
                 >
                   {item.name}
@@ -51,6 +53,7 @@ const listitems = () => {
             ))}
           </div>
         )}
+
         <AddItem
           addItemPopUp={addItemPopUp}
           setaddItemPopUp={setaddItemPopUp}
