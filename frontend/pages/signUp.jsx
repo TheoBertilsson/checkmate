@@ -9,8 +9,10 @@ const signUp = () => {
       <input type="email" placeholder="Email" className="inputUsername" />
         <input type="text" placeholder="Username" className="inputUsername" />
         <input type="text" placeholder="Password" className="inputUsername" />
-        <input type="button" value="CREATE ACCOUNT" className="createAccountBtn" />
       </form>
+      <Link href="/list" className="createAccountBtn">
+        CREATE ACCOUNT
+      </Link>
     </main>
   )
 }
