@@ -126,8 +126,16 @@ app.get('/getCheckedItems', (req, res) => {
         res.status(400).end;
     });
 });
-app.get('/getCheckedItem', (req, res) => {
+app.get('/getItem', (req, res) => {
     database.all("SELECT * FROM tasks WHERE id=?", [req.query.itemID])
+        .then((tasks) => {
+        res.send(tasks);
+    }).catch(() => {
+        res.status(400).end;
+    });
+});
+app.get('/getCheckedItem', (req, res) => {
+    database.all("SELECT * FROM completed_tasks WHERE id=?", [req.query.itemID])
         .then((tasks) => {
         res.send(tasks);
     }).catch(() => {
@@ -171,6 +179,20 @@ app.post('/addCheckedItem', (req, res) => {
 });
 app.delete('/removeItem', (req, res) => {
     database.run('DELETE FROM tasks WHERE id=?', [req.query.itemID]);
+    res.send();
+});
+app.delete('/removeCheckedItem', (req, res) => {
+    database.run('DELETE FROM completed_tasks WHERE id=?', [req.query.itemID]);
+    res.send();
+});
+app.delete('/removeList', (req, res) => {
+    database.run('DELETE FROM completed_tasks WHERE list_id=?', [req.query.listID]);
+    database.run('DELETE FROM tasks WHERE list_id=?', [req.query.listID]);
+    database.run('DELETE FROM lists WHERE id=?', [req.query.listID]);
+    res.send();
+});
+app.delete('/logout', (req, res) => {
+    database.run('DELETE FROM tokens WHERE account_id=?', [req.query.accountID]);
     res.send();
 });
 app.listen(8080, () => {
