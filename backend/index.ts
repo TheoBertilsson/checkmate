@@ -37,6 +37,9 @@ app.get('/login', (req, res) => {
         res.status(400);
         res.end();
       }
+      database
+      .all("DELETE FROM tokens WHERE account_id=?", [account[0].id])
+
       if (account[0] !== undefined) {
         if (account[0].username === req.query.username) {
           if (req.query.password === account[0].password) {
@@ -66,9 +69,49 @@ app.get('/login', (req, res) => {
     });
 
 })
+app.get('/authenticate', (req,res) => {
+  database.all("SELECT * FROM tokens WHERE token=?",[req.query.token])
+  .then((tokenId)=>{
+    res.send(tokenId);
+  }).catch(()=>{
+    res.status(400).end;
+  })
+})
 
+app.get('/getLists', (req,res) => {
+  database.all("SELECT * FROM lists WHERE list_account_id=?",[req.query.accountID])
+  .then((lists)=>{
+    res.send(lists);
+  }).catch(()=>{
+    res.status(400).end;
+  })
+})
+
+app.get('/getItems', (req,res) => {
+  database.all("SELECT * FROM tasks WHERE list_id=?",[req.query.listID])
+  .then((tasks)=>{
+    res.send(tasks);
+  }).catch(()=>{
+    res.status(400).end;
+  })
+})
+app.get('/getCheckedItems', (req,res) => {
+  database.all("SELECT * FROM completed_tasks WHERE list_id=?",[req.query.listID])
+  .then((tasks)=>{
+    res.send(tasks);
+  }).catch(()=>{
+    res.status(400).end;
+  })
+})
+app.get('/getCheckedItem', (req,res) => {
+  database.all("SELECT * FROM tasks WHERE id=?",[req.query.itemID])
+  .then((tasks)=>{
+    res.send(tasks);
+  }).catch(()=>{
+    res.status(400).end;
+  })
+})
 app.post('/signup', (req, res) => {
-
   database.all(
     "INSERT INTO accounts (account_email, password, username) VALUES (?,?,?)",
     [req.body.email, req.body.password, req.body.username]
@@ -79,8 +122,51 @@ app.post('/signup', (req, res) => {
     res.status(400).end()
   });
 })
+app.post('/addlist', (req, res) => {
+        database.all(
+          "INSERT INTO lists (list_name, list_account_id) VALUES (?,?)",
+          [req.body.listName,req.body.id]
+        ).then(() => {
+          res.status(201);
+          res.end();
+        }).catch((error)=>{
+          console.error("Error:", error);
+          res.status(401).end()
+        });
 
+})
+app.post('/addtasks', (req, res) => {
+  database.all(
+    "INSERT INTO tasks (task, list_id) VALUES (?,?)",
+    [req.body.itemName,req.body.listID]
+  ).then(() => {
+    res.status(201);
+    res.end();
+  }).catch((error)=>{
+    console.error("Error:", error);
+    res.status(401).end()
+  });
 
+})
+app.post('/addCheckedItem', (req, res) => {
+  database.all(
+    "INSERT INTO completed_tasks (task, list_id) VALUES (?,?)",
+    [req.body.itemName,req.body.listID]
+  ).then(() => {
+    res.status(201);
+    res.end();
+  }).catch((error)=>{
+    console.error("Error:", error);
+    res.status(401).end()
+  });
+
+})
+
+app.delete('/removeItem', (req, res) => {
+   database.run('DELETE FROM tasks WHERE id=?', [req.query.itemID])
+
+  res.send()
+})
 
 app.listen(8080, () => {
   console.log('Webbtjänsten kan nu ta emot anrop.')
