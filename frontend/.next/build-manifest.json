@@ -27,15 +27,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/list": [
+    "/list/[token]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/list.js"
+      "static/chunks/pages/list/[token].js"
     ],
-    "/signUp": [
+    "/listitems/[name]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/signUp.js"
+      "static/chunks/pages/listitems/[name].js"
     ]
   },
   "ampFirstPages": []

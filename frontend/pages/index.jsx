@@ -24,8 +24,7 @@ function Home() {
       })
       .then((result) => {
         setLoginFailed(false);
-        console.log(result.token);
-        router.push(`/list?token=${result.token}`);
+        router.push(`/list/${result.token}`);
       })
       .catch((error) => {
         console.log(error);

@@ -1,0 +1,1 @@
+{"c":["pages/listitems/[name]","webpack"],"r":["pages/list/[token]"],"m":["./components/addList.js","./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=%2FUsers%2Ftheobertilsson%2FDocuments%2FITHS%2FFullstack%2FCheckMate%2Ffrontend%2Fpages%2Flist%2F%5Btoken%5D.jsx&page=%2Flist%2F%5Btoken%5D!","./pages/list/[token].jsx"]}
