@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import AddItem from "../../components/addItem.js";
+import { ArrowLeft } from "react-bootstrap-icons";
 
 const listitems = () => {
   const router = useRouter();
@@ -64,7 +65,7 @@ const listitems = () => {
       });
   }
   function addCheckedItem(itemID) {
-    fetch("http://localhost:8080/getCheckedItem?itemID=" + itemID)
+    fetch("http://localhost:8080/getItem?itemID=" + itemID)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -102,7 +103,80 @@ const listitems = () => {
         console.log(error);
       });
   }
-
+  function uncheckItem(itemID) {
+    fetch("http://localhost:8080/getCheckedItem?itemID=" + itemID)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(response.status);
+        }
+      })
+      .then((result) => {
+        console.log(result);
+        fetch("http://localhost:8080/addtasks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itemName: result[0].task,
+            listID: id,
+          }),
+        })
+          .then((response) => {
+            console.log(response);
+            if (response.ok) {
+              console.log("UnChecked item");
+              removeCheckedItem(itemID);
+            } else {
+              console.error("Error1:", response.statusText);
+            }
+          })
+          .catch((error) => {
+            console.error("Error2:", error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  function removeCheckedItem(itemID) {
+    fetch("http://localhost:8080/removeCheckedItem?itemID=" + itemID, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        console.log("Removed");
+        getCheckedItems(id);
+        getItems(id);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }
+  function removeList(listID) {
+    fetch("http://localhost:8080/removeList?listID=" + listID, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        console.log("Removed List");
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }
   useEffect(() => {
     console.log(token);
     if (accountID === 0) {
@@ -128,6 +202,11 @@ const listitems = () => {
   return (
     <>
       <main>
+        <ArrowLeft
+          onClick={() => {
+            router.push(`/list/${token}`);
+          }}
+        />
         <h2
           className="h2List"
           style={addItemPopUp === true ? { filter: "blur(5px)" } : {}}
@@ -154,7 +233,13 @@ const listitems = () => {
             ))}
             {checkItemList.map((item) => (
               <React.Fragment key={item.id}>
-                <p key={item.id} className="checkedItemBox" onClick={() => {}}>
+                <p
+                  key={item.id}
+                  className="checkedItemBox"
+                  onClick={() => {
+                    uncheckItem(item.id);
+                  }}
+                >
                   {item.task}
                 </p>
               </React.Fragment>
@@ -170,11 +255,12 @@ const listitems = () => {
           getItems={getItems}
         />
         <Link
-          href="/list"
+          href={`/list/${token}`}
           className="signUpBtn"
           style={addItemPopUp === true ? { filter: "blur(5px)" } : {}}
+          onClick={() => removeList(id)}
         >
-          Mark as Complete
+          Remove
         </Link>
       </main>
     </>

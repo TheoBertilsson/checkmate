@@ -2,12 +2,51 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import AddList from "../../components/addList";
 import { useRouter } from "next/router";
+import { BoxArrowInLeft } from "react-bootstrap-icons";
 
 const list = () => {
+  const router = useRouter();
   const { token } = useRouter().query;
   const [addListPopUp, setaddListPopUp] = useState(false);
   const [accountID, setAccountID] = useState(0);
   const [lists, setLists] = useState([]);
+  function logout() {
+    fetch("http://localhost:8080/authenticate?token=" + token)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(response.status);
+        }
+      })
+      .then((result) => {
+        fetch(
+          "http://localhost:8080/logout?accountID=" + result[0].account_id,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            console.log("Logged out");
+            router.push(`/`);
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with the fetch operation:",
+              error
+            );
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   function getLists(x) {
     fetch("http://localhost:8080/getLists?accountID=" + x)
       .then((response) => {
@@ -47,6 +86,11 @@ const list = () => {
   }, []);
   return (
     <main>
+      <BoxArrowInLeft
+        onClick={() => {
+          logout(token);
+        }}
+      />
       <h1
         className="h1LogoLists"
         style={addListPopUp === true ? { filter: "blur(5px)" } : {}}
@@ -60,7 +104,16 @@ const list = () => {
         >
           {lists.map((item) => (
             <React.Fragment key={item.id}>
-              <Link href={"/listitems/" + item.list_name + "?token=" + token + "&id=" + item.id}>
+              <Link
+                href={
+                  "/listitems/" +
+                  item.list_name +
+                  "?token=" +
+                  token +
+                  "&id=" +
+                  item.id
+                }
+              >
                 {item.list_name}
               </Link>
             </React.Fragment>
@@ -73,13 +126,6 @@ const list = () => {
         token={token}
         getLists={getLists}
       />
-      <Link
-        href="/signUp"
-        className="signUpBtn"
-        style={addListPopUp === true ? { filter: "blur(5px)" } : {}}
-      >
-        ARCHIVE
-      </Link>
     </main>
   );
 };

@@ -7,6 +7,11 @@ const addList = ({ addListPopUp, setaddListPopUp, token, getLists }) => {
   function addListPressed() {
     setaddListPopUp(true);
   }
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && addListPopUp === true) {
+      addListToDB();
+    }
+  };
   function addListToDB() {
     fetch("http://localhost:8080/authenticate?token=" + token)
       .then((response) => {
@@ -79,6 +84,7 @@ const addList = ({ addListPopUp, setaddListPopUp, token, getLists }) => {
           <button
             className="addListBtn"
             onClick={addListToDB}
+            onKeyDown={handleKeyDown}
             disabled={!listName}
           >
             Add List

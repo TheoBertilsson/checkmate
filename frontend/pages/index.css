@@ -25,6 +25,7 @@ main {
   text-transform: uppercase;
   text-align: center;
   text-decoration: underline;
+  max-width: 60%;
 }
 .h1Logo,
 .h1LogoLists {
@@ -211,4 +212,23 @@ main {
   margin-left: 30vh;
   margin-bottom: 22vh;
   cursor: pointer;
+}
+
+/*  BackBtn */
+.bi-arrow-left{
+  position:absolute;
+  top:6vh;
+  left:3vh;
+  cursor: pointer;
+}
+
+/*  Logout  */
+.bi-box-arrow-in-left{
+  position:absolute;
+  width: 3vh;
+  height: 3dvh;
+  top:6.5vh;
+  left:3vh;
+  cursor: pointer;
+  color: #283618;
 }

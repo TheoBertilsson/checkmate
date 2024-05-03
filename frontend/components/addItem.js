@@ -3,7 +3,12 @@ import { XSquare } from "react-bootstrap-icons";
 
 const addItem = ({ addItemPopUp, setaddItemPopUp, token, id, getItems }) => {
   const [itemName, setItemName] = useState("");
-  const [errorAddingItem, setErrorAddingItem] = useState(false)
+  const [errorAddingItem, setErrorAddingItem] = useState(false);
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && addItemPopUp === true) {
+      addItemToDB();
+    }
+  };
   function addItemPressed() {
     setaddItemPopUp(true);
   }
@@ -76,7 +81,11 @@ const addItem = ({ addItemPopUp, setaddItemPopUp, token, id, getItems }) => {
             onChange={(event) => setItemName(event.target.value)}
             style={errorAddingItem === true ? { border: "red 4px solid" } : {}}
           />
-          <button className="addListBtn" onClick={addItemToDB}>
+          <button
+            className="addListBtn"
+            onClick={addItemToDB}
+            onKeyDown={handleKeyDown}
+          >
             Add Item
           </button>
         </div>
